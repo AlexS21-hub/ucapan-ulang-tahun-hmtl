@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ucapan Selamat Ulang Tahun</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .card {
+            background-color: white;
+            width: 350px;
+            height: 500px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 150, 0.2);
+            text-align: center;
+            position: relative;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #ff7eb9, #8c52ff);
+            color: white;
+        }
+        
+        .cake {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #333;
+        }
+        
+        .back-message {
+            font-size: 24px;
+            margin: 20px 0;
+            color: white;
+        }
+        
+        .click-info {
+            position: absolute;
+            bottom: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .balloon {
+            position: absolute;
+            width: 30px;
+            height: 40px;
+            border-radius: 50%;
+            animation: float 4s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+        
+        .button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .button:hover {
+            background-color: #ff80ab;
+            transform: scale(1.05);
+        }
+        
+        #nameInput {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid #ddd;
+            margin-top: 20px;
+            font-size: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="card" id="birthdayCard">
+        <div class="card-front">
+            <div class="cake">🎂</div>
+            <h1 class="message">Selamat Ulang Tahun!</h1>
+            <div>
+                <input type="text" id="nameInput" placeholder="Masukkan nama..." maxlength="15">
+                <button class="button" id="setName">Simpan Nama</button>
+            </div>
+            <p class="click-info">Klik kartu untuk membuka ucapan spesial</p>
+        </div>
+        <div class="card-back">
+            <h1 class="back-message">Selamat Ulang Tahun</h1>
+            <h2 id="personName" class="back-message">Sahabat!</h2>
+            <p class="back-message">Semoga semua impianmu menjadi kenyataan</p>
+            <button class="button" id="celebrateButton">Rayakan! 🎉</button>
+        </div>
+    </div>
+
+    <script>
+        const card = document.getElementById('birthdayCard');
+        const nameInput = document.getElementById('nameInput');
+        const setNameButton = document.getElementById('setName');
+        const personName = document.getElementById('personName');
+        const celebrateButton = document.getElementById('celebrateButton');
+        
+        // Flip kartu saat diklik
+        card.addEventListener('click', function() {
+            if (event.target !== nameInput && 
+                event.target !== setNameButton && 
+                event.target !== celebrateButton) {
+                this.classList.toggle('flipped');
+            }
+        });
+        
+        // Set nama
+        setNameButton.addEventListener('click', function() {
+            if (nameInput.value.trim() !== '') {
+                personName.textContent = nameInput.value + '!';
+                card.classList.add('flipped');
+            }
+        });
+        
+        // Tekan Enter untuk mengatur nama
+        nameInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                setNameButton.click();
+            }
+        });
+        
+        // Fungsi rayakan
+        celebrateButton.addEventListener('click', function(event) {
+            event.stopPropagation();
+            createBalloons();
+            createConfetti();
+        });
+        
+        // Membuat balon-balon
+        function createBalloons() {
+            const colors = ['#ff5252', '#ffab40', '#ffeb3b', '#66bb6a', '#42a5f5', '#7e57c2'];
+            
+            for (let i = 0; i < 15; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                balloon.style.left = Math.random() * window.innerWidth + 'px';
+                balloon.style.top = (window.innerHeight + Math.random() * 100) + 'px';
+                balloon.style.animationDelay = Math.random() * 2 + 's';
+                document.body.appendChild(balloon);
+                
+                // Animasi balon naik ke atas
+                const speed = Math.random() * 3 + 2;
+                balloon.animate(
+                    [
+                        { transform: 'translateY(0)' },
+                        { transform: 'translateY(-' + (window.innerHeight + 100) + 'px)' }
+                    ],
+                    {
+                        duration: speed * 1000,
+                        iterations: 1,
+                        fill: 'forwards'
+                    }
+                );
+                
+                // Hapus balon setelah animasi selesai
+                setTimeout(() => {
+                    balloon.remove();
+                }, speed * 1000);
+            }
+        }
+        
+        // Membuat confetti
+        function createConfetti() {
+            const colors = ['#ff5252', '#ffab40', '#ffeb3b', '#66bb6a', '#42a5f5', '#7e57c2'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-10px';
+                document.body.appendChild(confetti);
+                
+                const xMovement = Math.random() * 100 - 50;
+                const rotation = Math.random() * 360;
+                const duration = Math.random() * 2 + 1;
+                
+                confetti.animate(
+                    [
+                        { 
+                            transform: 'rotate(0deg)', 
+                            top: '-10px',
+                            left: confetti.style.left,
+                            opacity: 1
+                        },
+                        { 
+                            transform: `rotate(${rotation}deg)`, 
+                            top: (window.innerHeight + 20) + 'px',
+                            left: `calc(${confetti.style.left} + ${xMovement}px)`,
+                            opacity: 0
+                        }
+                    ],
+                    {
+                        duration: duration * 1000,
+                        easing: 'ease-in',
+                        iterations: 1
+                    }
+                );
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, duration * 1000);
+            }
+        }
+    </script>
+</body>
+</html>
